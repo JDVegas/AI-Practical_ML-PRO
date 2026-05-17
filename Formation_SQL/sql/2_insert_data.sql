@@ -75,5 +75,5 @@ INSERT INTO Emprunts (EmpruntID, LivreID, EmprunteurID, DateEmprunt, DateRetourP
 -- PROTOCOL
 -- 1. Within the Shell, tip the command `psql -U postgres -d sandbox_db -f sql/2_insert_data.sql`
 -- 2. Within the Shell, connect to the database `psql -U postgres -d sandbox_db`
--- 3. Within the Shell in the postgres server `sandbox_db=# `
+-- 3. Within the Shell in the postgres server `sandbox_db=# SELECT * FROM Auteurs`
 
