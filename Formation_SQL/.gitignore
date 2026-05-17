@@ -1,0 +1,4 @@
+# Does not share those elements on the github. Must remains local ! 
+.env
+__pycache__/
+*pyc
