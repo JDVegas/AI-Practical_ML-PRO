@@ -1,35 +1,35 @@
 [
   {
-    "nom": "Moreau",
-    "prenom": "Claire",
-    "age": 51,
-    "poids": 42.7,
-    "ville_naissance": "Sydney",
-    "date_naissance": "1974-11-12",
-    "taille": 1.74,
-    "imc": 14.1,
-    "pays_naissance": "Australie"
-  },
-  {
-    "nom": "Moreau",
+    "nom": "Durand",
     "prenom": "Jean",
-    "age": 47,
-    "poids": 49.6,
+    "age": 45,
+    "poids": 48.2,
     "ville_naissance": "Londres",
-    "date_naissance": "1978-11-22",
-    "taille": 1.89,
-    "imc": 13.89,
+    "date_naissance": "1980-03-10",
+    "taille": 1.88,
+    "imc": 13.64,
     "pays_naissance": "Royaume-Uni"
   },
   {
-    "nom": "Bernard",
+    "nom": "Durand",
     "prenom": "Jean",
-    "age": 58,
-    "poids": 41.0,
-    "ville_naissance": "Lisbonne",
-    "date_naissance": "1967-08-25",
-    "taille": 1.6,
-    "imc": 16.02,
-    "pays_naissance": "Portugal"
+    "age": 45,
+    "poids": 48.2,
+    "ville_naissance": "Londres",
+    "date_naissance": "1980-03-10",
+    "taille": 1.88,
+    "imc": 13.64,
+    "pays_naissance": "Royaume-Uni"
+  },
+  {
+    "nom": "Dupont",
+    "prenom": "Luc",
+    "age": 56,
+    "poids": 45.5,
+    "ville_naissance": "Sydney",
+    "date_naissance": "1969-08-19",
+    "taille": 1.77,
+    "imc": 14.52,
+    "pays_naissance": "Australie"
   }
 ]
