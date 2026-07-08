@@ -1,0 +1,5 @@
+# Ignore local virtual environment 
+.venv
+
+# Ignore element that allow to manage git
+.git
