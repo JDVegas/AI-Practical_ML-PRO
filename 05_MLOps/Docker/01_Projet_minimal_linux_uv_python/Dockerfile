@@ -10,11 +10,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates
 # Add environment variables to manage UV parameters
 # -- x----------------------x --
 # Indicate to UV to ignore libraries listed into "dev dependencies"
-ENV UV_NO_DEV = 1 
+ENV UV_NO_DEV=1 
 # Force Python files to be compiled into BYTECODE
-ENV UV_COMPILE_BYTECODE = 1
+ENV UV_COMPILE_BYTECODE=1
 # Download Python when necessary
-ENV UV_PYTHON_DOWNLOAD = auto
+ENV UV_PYTHON_DOWNLOAD=auto
 
 # -- x----------------------x --
 
@@ -30,4 +30,6 @@ RUN uv sync --locked
 
 
 # RUN a command to check that everything worked well : display UV version
-CMD ["uv", "--version"]
+#CMD ["uv", "--version"]
+# RUN a command to check that everything worked well : display UV Python version
+CMD ["uv", "run", "python", "--version"]
