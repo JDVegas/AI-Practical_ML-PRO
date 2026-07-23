@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 
 # ML libraries
 from sklearn.datasets import load_iris
-
+from sklearn.ensemble import RandomForestClassifier
 # -- x-----------------------------------------x --
 
 
@@ -164,6 +164,8 @@ st.divider()
 st.write("##")
 
 
+
+
 # -- DISPLAY DATAFRAMES
 # -- x-----------------------------------------x --
 st.subheader("Display DataFrames")
@@ -179,4 +181,232 @@ st.dataframe(df)
 
 # -- LOAD FILES
 # -- x-----------------------------------------x --
+# Instatiate the loading file widget
+uploaded_file = st.file_uploader("Choose a CSV file")
+
+# IF .. a file is uploaded then read it
+if uploaded_file is not None:
+    df = pd.read_csv(uploaded_file)
+    st.write(df)
+# ELSE .. no file is uploaded then display a message 
+else : 
+    st.info("Please, upload a CSV file to display data")
 # -- x-----------------------------------------x --
+
+
+
+
+# Create whitespace and separation lines
+st.write("##")
+st.divider()
+st.write("##")
+
+
+
+
+# -- SCRIPT TO USE ML
+# -- x-----------------------------------------x --
+st.subheader("Prediction using a ML model")
+
+# Load data
+# -- x-------------------x --
+# Load iris dataset using sklearn
+iris = load_iris(return_X_y=True)
+X = iris[0]
+y = iris[1]
+
+# Extract the class names
+iris_bunch = load_iris(as_frame=True) # Type "Bunch"
+target_names = iris_bunch.target_names # Type np.array
+# -- x-------------------x --
+
+# Instantiate the mode
+clf = RandomForestClassifier()
+
+# Train the model
+clf.fit(X, y)
+
+
+# User interface for the model input - Sidebar
+# -- x-------------------x --
+#  Separate title within the sidebar
+st.sidebar.divider()
+st.sidebar.subheader("ML model input parameters")
+
+# Slider to get model caracteristics
+sepal_lenght = st.sidebar.slider(
+    "Sepal length"
+    , float(X[:, 0].min())
+    , float(X[:, 0].max())
+    , float(X[:, 0].mean())
+)
+
+sepal_width = st.sidebar.slider(
+    "Sepal width"
+    , float(X[:, 1].min())
+    , float(X[:, 1].max())
+    , float(X[:, 1].mean())
+)
+
+petal_lenght = st.sidebar.slider(
+    "Petal length"
+    , float(X[:, 2].min())
+    , float(X[:, 2].max())
+    , float(X[:, 2].mean())
+)
+
+petal_width = st.sidebar.slider(
+    "Petal width"
+    , float(X[:, 3].min())
+    , float(X[:, 3].max())
+    , float(X[:, 3].mean())
+)
+
+# Button to launch prediction
+start_prediction = st.sidebar.button("Predict")
+# -- x-------------------x --
+
+
+
+# User interface for the model input - Mainwindow
+# -- x-------------------x --
+st.write("##")
+st.subheader("Use ML model")
+
+# Prediction part
+# -- x--------x --
+# IF .. the button have been pushed then activate protocol
+if start_prediction : 
+    # Create a table containing input values
+    input_data = [[sepal_lenght, sepal_width, petal_lenght, petal_width]]
+    # Predict the flower class
+    prediction = clf.predict(input_data)
+    # Get each class probability
+    prediction_proba = clf.predict_proba(input_data)
+
+    # Display the results
+    st.write(f"##### -> Predicted class: {target_names[prediction][0]}")
+    st.write("##### -> Probabilities")
+    st.write(prediction_proba)
+# -- x--------x --
+
+# -- x-------------------x --
+
+# -- x-----------------------------------------x --
+
+
+# Create whitespace and separation lines
+st.write("##")
+st.divider()
+st.write("##")
+
+
+
+
+
+
+
+
+
+
+# -- ADVANCED TECHNICS -- 
+##########################################
+
+
+# -- USE HTML and CSS
+# -- x-----------------------------------------x --
+st.subheader("Use HTML and CSS")
+
+
+# Inject personalised CSS to increase a text size
+st.markdown(
+    """
+    <style>
+        .grand-texte {
+            font-size:50px !important;
+        }
+    </style>
+    """
+    , unsafe_allow_html=True
+)
+
+# Create an HTML tag using the CSS caracteristic
+st.markdown('<p class="grand-texte">Text en grand</p>', unsafe_allow_html=True)
+# -- x-----------------------------------------x --
+
+
+
+# Create whitespace and separation lines
+st.write("##")
+st.divider()
+st.write("##")
+
+
+
+# -- USE CACHE
+# -- x-----------------------------------------x --
+st.subheader("Use CACHE")
+
+# Use cache to temporary store loaded data
+# -- x-------------------x --
+# The cache expire after 60 seconds
+@st.cache_data(ttl=60) # ttl = time to leave
+def load_data():
+    # Simulate data loading
+    data = {"values":[1, 2, 3, 4, 5]}
+    return data
+
+# Call function to load data
+data = load_data()
+# Display data
+st.write(data)
+# -- x-------------------x --
+
+
+# Use cache to temporary store loaded model
+# -- x-------------------x --
+@st.cache_data
+def train_model():
+    # Simulate a costly model training
+    clf = RandomForestClassifier(n_estimators=100)
+    clf.fit(X,y)
+    return clf
+
+# Call the function to train de model
+clf = train_model()
+
+
+# -- x-------------------x --
+
+
+# -- x-----------------------------------------x --
+
+
+
+
+# Create whitespace and separation lines
+st.write("##")
+st.divider()
+st.write("##")
+
+
+
+# -- USE SESSION
+# -- x-----------------------------------------x --
+st.subheader("Use session")
+
+
+# Initialise a counter within the session
+if "counter" not in st.session_state:
+    st.session_state.counter = 0
+
+# IF .. the button is pushed, then increment the counter
+if st.button("Increment"):
+    st.session_state.counter += 1
+
+# Display the counter value
+st.write(f"Counter value: {st.session_state.counter}")
+
+# -- x-----------------------------------------x --
+
+
