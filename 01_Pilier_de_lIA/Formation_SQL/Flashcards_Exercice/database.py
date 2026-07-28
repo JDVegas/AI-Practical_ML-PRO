@@ -58,6 +58,7 @@ def init_db():
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS cards (
             id INT PRIMAARY KEY
+            , question TEXT STRICT
             , response TEXT STRICT
             , probability REAL STRICT
             , id_theme INT STRICT
