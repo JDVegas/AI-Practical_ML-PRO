@@ -38,6 +38,7 @@ def close_db_connection(conn):
     """ Save the modification done and properly close the database connection """
     # Validate modifications
     conn.commit()
+    
     # Close the connection
     conn.close()
     # Display a message
