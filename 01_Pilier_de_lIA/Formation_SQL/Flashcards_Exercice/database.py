@@ -22,11 +22,14 @@ def connect_database() -> Tuple:
     # Create a connexion to the database
     conn = sqlite3.connect("flashcards.db")
 
+    # Display a message
+    print("\nConnection to the database is operational !")
+
     # Activate the foreign_keys parameters 
     conn.execute("PRAGMA foreign_keys = ON;")
 
     # Display a message
-    print("\nConnection to the database is operational !\n")
+    print("`foreign_key` PRAGMA parameter is set to ON !\n")
 
     # Create a cursor to execute sql requests
     cursor = conn.cursor()
@@ -35,10 +38,14 @@ def connect_database() -> Tuple:
 
 # Function to save and disconnect the database
 def close_db_connection(conn):
-    """ Save the modification done and properly close the database connection """
+    """ Save the modification done and properly close the database connection 
+
+        Args : 
+            conn : the connection to close
+    """
     # Validate modifications
     conn.commit()
-    
+
     # Close the connection
     conn.close()
     # Display a message
@@ -58,7 +65,7 @@ def init_db():
     # Create CARDS table
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS cards (
-            id INT PRIMAARY KEY
+            id INTEGER PRIMARY KEY
             , question TEXT STRICT
             , response TEXT STRICT
             , probability REAL STRICT
@@ -70,7 +77,7 @@ def init_db():
     # Create THEMES table
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS themes (
-            id INT PRIMARY KEY
+            id INTEGER PRIMARY KEY
             , theme TEXT STRICT NOT NULL
         );
     ''')
@@ -78,7 +85,7 @@ def init_db():
     # Create STATS table
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS stats (
-            id INT STRICT PRIMARY KEY
+            id INTEGER PRIMARY KEY
             , good_answers INT STRICT
             , wrong_answers INT STRICT
             , date DATE
