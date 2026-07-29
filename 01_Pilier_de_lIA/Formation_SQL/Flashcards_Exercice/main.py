@@ -27,20 +27,51 @@ import crud_functions_cards_table as cfct
 
 
 
-# -- SCRIPT
+# -- SCRIPT TO TEST dataset.py SCRIPT
 # -- x-------------------------------------x --
 # Initialise 
 #db.init_db()
+# -- x-------------------------------------x --
 
+
+
+# -- SCRIPT TO TEST crud_functions_cards_table.py SCRIPT
+# -- x-------------------------------------x --
 # Create 3 cards
 #cfct.create_card("What is the capital of France ?", "Paris", "1", 2)
 #cfct.create_card("What is the capital of Great Britain ? ", "London", "1", 7)
 #cfct.create_card("What is the capital of Australia ?", "Camberra", "1", 6)
+#cfct.create_card("What is the capital of the USA ?", "Washington D.C", "1", 9)
 
 # Get a card
 #card = cfct.get_card(2)
 
 # Update a card 
 #cfct.update_card(3, "What is my Australian prefered destination ?", 'Sydney', 0.5, 9)
+
+# Remove a card
+# cfct.delete_card(2)
+
+# Extract all cards
+#cards = cfct.get_all_cards()
+#print(cards)
+
+
+# Get the number of card of the deck
+#total_number = cfct.get_number_of_cards()
+#print(total_number)
+
+
+
+# Get the number of cards from a category
+#cards = cfct.get_cards_by_theme('9')
+#print(cards)
+# -- x-------------------------------------x --
+
+
+
+
+# -- SCRIPT TO TEST crud_functions_themes_table.py SCRIPT
+# -- x-------------------------------------x --
 
 # -- x-------------------------------------x --
