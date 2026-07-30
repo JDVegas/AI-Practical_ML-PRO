@@ -1,5 +1,5 @@
 def main():
-    print("Hello from 01-projet-minimal-linux-uv-python!")
+    print("Hello!")
 
 
 if __name__ == "__main__":

@@ -21,12 +21,20 @@ ENV UV_PYTHON_DOWNLOAD=auto
 # Install UV copying the elements from UV server
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/ 
 
-# Copy the entire project folder content
-COPY . . 
+# Copy files required by UV and add them within the current folder
+COPY pyproject.toml uv.lock ./
 
-# Create the UV environement within the container
-# Here the file `.lock` from UV will be used within the container
-RUN uv sync --locked
+# Create the UV environment using 
+# --frozen flag to strictly respect what is within the the uv.lock file
+# --no-install-project to ask to not ìnstall the project as it is not here yet
+RUN uv sync --frozen --no-install-project
+
+
+# Copy our project source code
+COPY . .
+  
+# To install the project itself
+RUN uv sync --frozen
 
 
 # RUN a command to check that everything worked well : display UV version
