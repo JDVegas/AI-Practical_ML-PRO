@@ -3,3 +3,6 @@
 
 # Ignore element that allow to manage git
 .git
+
+# The folder that will be mapped to the contenainer volume
+my_data
