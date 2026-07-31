@@ -19,6 +19,7 @@ import sqlite3
 # -- x----------------x --
 import database as db
 import crud_functions_cards_table as cfct
+import crud_functions_themes_table as cftt
 # -- x----------------x --
 
 
@@ -73,5 +74,21 @@ import crud_functions_cards_table as cfct
 
 # -- SCRIPT TO TEST crud_functions_themes_table.py SCRIPT
 # -- x-------------------------------------x --
+# Add new themes
+#cftt.create_theme("English")
+#cftt.create_theme("Math")
 
+# Get a theme 
+#theme = cftt.get_theme(10)
+#print(theme)
+
+# Update a theme 
+#cftt.update_theme(10, "Español")
+
+# Remove a theme 
+#cftt.delete_theme(10)
+
+# Extract all the themes
+#themes = cftt.get_all_themes()
+#print(themes)
 # -- x-------------------------------------x --
