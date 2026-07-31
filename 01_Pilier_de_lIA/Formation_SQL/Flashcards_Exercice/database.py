@@ -78,7 +78,7 @@ def init_db():
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS themes (
             id INTEGER PRIMARY KEY
-            , theme TEXT STRICT NOT NULL
+            , theme TEXT NOT NULL UNIQUE
         );
     ''')
 
