@@ -20,6 +20,7 @@ import sqlite3
 import database as db
 import crud_functions_cards_table as cfct
 import crud_functions_themes_table as cftt
+import statistics as stat
 # -- x----------------x --
 
 
@@ -91,4 +92,19 @@ import crud_functions_themes_table as cftt
 # Extract all the themes
 #themes = cftt.get_all_themes()
 #print(themes)
+# -- x-------------------------------------x --
+
+
+
+
+# -- SCRIPT TO TEST statistsics.py functions
+# -- x-------------------------------------x --
+# Test to create and update today stats
+#stat.update_stats(True)
+
+# Test to update a card probability
+#stat.update_card_probability(2, False)
+
+# Get all statistics
+#print(stat.get_stats()) 
 # -- x-------------------------------------x --
