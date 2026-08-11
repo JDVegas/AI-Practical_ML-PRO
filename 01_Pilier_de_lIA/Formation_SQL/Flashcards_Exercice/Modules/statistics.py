@@ -19,7 +19,7 @@ import sqlite3
 
 # Flashcard functions
 # -- x----------------x --
-from  database import connect_database, close_db_connection
+from  .database import connect_database, close_db_connection
 # -- x----------------x --
 
 # -- x-------------------------------------x --
