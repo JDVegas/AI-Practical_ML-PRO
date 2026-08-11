@@ -52,15 +52,6 @@ def init_flashcards_page():
     """ Initialize flashcards page """
 
 
-    # Load cards list from the database
-    if "cards" not in st.session_state:
-        cards = cfct.get_all_cards()
-        # Format cards
-        cards = [{key:cards[key][idx] for key in cards.keys()} for idx in range(len(cards['id']))]
-        #print(f'\n[CARDS]:\n {cards}\n')
-        st.session_state.cards = cards
-        #print(f'\n[CARDS]:\n {st.session_state.cards}\n')
-
     # Help Debugging
     print(f"[init_flashcards_page] have been run !")
 # -- x-------------------------------------x --
@@ -87,6 +78,21 @@ def init_stat_page():
 # Define a function that initialize the page 3
 def init_config_page():
     """ Initialize configiguration page """
+
+    # Card part 
+    # -- x--------------x --
+    # Load cards list from the database
+    if "cards" not in st.session_state:
+        cards = cfct.get_all_cards()
+        # Format cards
+        cards = [{key:cards[key][idx] for key in cards.keys()} for idx in range(len(cards['id']))]
+        #print(f'\n[CARDS]:\n {cards}\n')
+        st.session_state.cards = cards
+        #print(f'\n[CARDS]:\n {st.session_state.cards}\n')
+    # -- x--------------x --
+
+
+
 
     # Add theme part 
     # -- x--------------x --
