@@ -17,10 +17,10 @@ import sqlite3
 
 # Flashcard functions
 # -- x----------------x --
-import database as db
-import crud_functions_cards_table as cfct
-import crud_functions_themes_table as cftt
-import statistics as stat
+import Modules.database as db
+import Modules.crud_functions_cards_table as cfct
+import Modules.crud_functions_themes_table as cftt
+import Modules.statistics as stat
 # -- x----------------x --
 
 
@@ -87,7 +87,7 @@ import statistics as stat
 #cftt.update_theme(10, "Español")
 
 # Remove a theme 
-#cftt.delete_theme(10)
+cftt.delete_theme(10)
 
 # Extract all the themes
 #themes = cftt.get_all_themes()
