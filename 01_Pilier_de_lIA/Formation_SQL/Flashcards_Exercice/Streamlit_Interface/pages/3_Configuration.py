@@ -60,6 +60,36 @@ theme_index = {item['id']:item["theme"] for item in st.session_state.themes}
 # -- FUNCTIONS
 # -- x-----------------------------------------x --
 
+# CARDS FUNCTIONS
+# -- x-------------------x --
+
+
+# Define a functio to remove cards
+def remove_cards(card_ids: List[int]):
+    """ Plumbing function that allow to remove one or multiple cards. 
+
+        Args:
+            cards (List[int]) : a list of dict contaning all the cards to remove     
+    """
+
+    # Iterate through each card 
+    for id in card_ids:
+        try:
+            cfct.delete_card(id)
+        except Exception as e:
+            print(f"Error `delete_theme` function : {e}")
+
+        # Update cards within the session
+        updated_cards = cfct.get_all_cards()
+        st.session_state.cards = [{key:updated_cards[key][idx] for key in updated_cards.keys()} for idx in range(len(updated_cards['id']))]
+        
+
+        # Inform the user
+        st.toast(f"The card(s) with the id '{id}' have been properly removed from the database", duration="short")
+# -- x-------------------x --
+
+
+
 
 # THEME FUNCTIONS
 # -- x-------------------x --
@@ -160,6 +190,12 @@ tab1, tab2 = st.tabs(["Card Management", "Theme Management"])
 # -- x-------------------x --
 with tab1 : 
     st.subheader('CARD MANAGEMENT')
+    
+    st.markdown("<h3><u>Existing Cards</u></h3>", unsafe_allow_html=True)
+    # Create a dataframe from tje theme list save into the session
+    cards_df = pd.DataFrame.from_dict(st.session_state.cards)
+    # Display the existing themes
+    st.dataframe(cards_df)
 
     # Expandable section to create a card 
     with st.expander("Create a card"):
@@ -181,7 +217,7 @@ with tab1 :
 
             submit_button = st.form_submit_button(
                     label= "Submit"
-                    , on_click=cfct.create_card(question, answer, 0.5, one_select["id"])
+                    #, on_click=cfct.create_card(question, answer, 0.5, one_select["id"])
                     , disabled=not (bool(question) and bool(answer))
                 )
 
@@ -203,6 +239,9 @@ with tab1 :
 
             with st.container(height=600):
 
+                # Initialise a checked list
+                checked_cards = []
+
                 # Iterate through each card 
                 for card in st.session_state.cards:
                     with st.container(border=True):
@@ -214,24 +253,40 @@ with tab1 :
                         #    toggled = st.toggle(label="Update", value=False, label_visibility="hidden", key= "toggle_"+str(card['id']) )
                         with col2:
                             checked = st.checkbox(label="Remove", value=False, label_visibility="hidden", key="checkbox_"+str(card['id']) )
-
+                            
 
                         st.markdown(f"<p style='text-align:center;'>{card['question']}</p>", unsafe_allow_html=True)
                         st.markdown(f"<p style='text-align:center;'>{card['response']}</p>", unsafe_allow_html=True)
 
-                        
+                    # IF .. the card have been selected then add it to the list 
+                    if checked:
+                        checked_cards.append(card['id'])
+                    # ELIF .. if the card is unselected, after being selected then remove it 
+                    elif not checked and card['id'] in checked_cards:
+                        checked_cards.remove(card['id'])
+
+        print(f"\n[Checked_cards]: {checked_cards}\n")
+
+                    
                         #st.markdown(f"""
                         #                {card["question"]}\n
                         #                {card['response']}
                         #                ---
                         #            """)
                     
-        st.button(label="Remove selected cards")
+        st.button(
+            label="Remove selected cards"
+            , on_click=remove_cards
+            , args=(checked_cards,)
+            , disabled=not checked_cards
+        )
 
                 
 
 
 # -- x-------------------x --
+
+
 
 
 
