@@ -89,6 +89,10 @@ def init_config_page():
         #print(f'\n[CARDS]:\n {cards}\n')
         st.session_state.cards = cards
         #print(f'\n[CARDS]:\n {st.session_state.cards}\n')
+
+    # Create keys to initialise form 
+    #if "form_selectbox" not in st.session_state:
+    #    st.session_state.form_selectbox = {"id":10, "theme":""}
     # -- x--------------x --
 
 
