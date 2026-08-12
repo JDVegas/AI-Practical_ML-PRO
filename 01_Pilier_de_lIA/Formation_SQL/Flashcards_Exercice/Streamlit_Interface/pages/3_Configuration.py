@@ -62,9 +62,38 @@ theme_index = {item['id']:item["theme"] for item in st.session_state.themes}
 
 # CARDS FUNCTIONS
 # -- x-------------------x --
+# Define a function to create a card
+def new_card(question: str, answer: str, theme_id: int):
+    """ Plumbing function that allow to 
+    
+        Args : 
+            question (str) : the question that will be asked to the user
+            answer (str) : the correct answer to the question
+            theme_id (int): the theme to assign to the card 
+    """
+
+    try:
+        cfct.create_card(question=question, response=answer, probability=0.5, id_theme=theme_id)
+    except Exception as e:
+        print(f"Error `new_card` function: {e}")
+
+    # Update fields
+    #st.session_state.form_selectbox = {"id":10, "theme":""}
+
+    # Update cards within the session
+    updated_cards = cfct.get_all_cards()
+    st.session_state.cards = [{key:updated_cards[key][idx] for key in updated_cards.keys()} for idx in range(len(updated_cards['id']))]
+    #print(f"\n[SESSION]: {st.session_state.cards}\n")
+
+    # Rerun the streamlit page as form behavior prevent my table from refresh
+    #st.rerun()
+    
+    # Inform the user
+    st.toast("The new card have been properly added to the database", duration="short")
+    
 
 
-# Define a functio to remove cards
+# Define a function to remove cards
 def remove_cards(card_ids: List[int]):
     """ Plumbing function that allow to remove one or multiple cards. 
 
@@ -100,6 +129,7 @@ def add_theme(new_theme: str):
         Args : 
             new_theme (str): the new theme to create
     """
+
     try :
         # Add the new theme to the database
         cftt.create_theme(new_theme)
@@ -193,12 +223,19 @@ with tab1 :
     
     st.markdown("<h3><u>Existing Cards</u></h3>", unsafe_allow_html=True)
     # Create a dataframe from tje theme list save into the session
-    cards_df = pd.DataFrame.from_dict(st.session_state.cards)
+    cards_df = pd.DataFrame(st.session_state.cards)
     # Display the existing themes
     st.dataframe(cards_df)
 
+
+
     # Expandable section to create a card 
     with st.expander("Create a card"):
+        """
+        NOTE : I here used a formular for the experimentation but it woudl have been easier to simply
+        add widgets to take the user input and a button to apply the function. With keys, 
+        each field woudld have been cleaned after running the function
+        """
         with st.form("Create_card"):
             # Ask the user to choose a theme
             #one_select = st.selectbox(label="Choose a theme", options=st.session_state.themes[["theme", "id"]].sort_values(by=["theme"]))
@@ -206,33 +243,50 @@ with tab1 :
                             label="Choose a theme"
                             , options=st.session_state.themes
                             , format_func=lambda x: x["theme"]
+                            #, key="form_selectbox"
                         )
 
             # Help debugging 
             #print(f'\n[one_select]: {one_select}\n')
 
-
+            # Instantiate the field to ger the user question and answer
             question = st.text_input("Question")
             answer = st.text_area("Answer")
 
-            submit_button = st.form_submit_button(
-                    label= "Submit"
-                    #, on_click=cfct.create_card(question, answer, 0.5, one_select["id"])
-                    , disabled=not (bool(question) and bool(answer))
-                )
+            #submit_button = st.form_submit_button(
+            #        label= "Submit"
+            #        , on_click=new_card
+            #        , args=(question, answer, one_select["id"])
+            #        #, on_click=cfct.create_card(question, answer, 0.5, one_select["id"])
+            #        #, disabled=not (bool(question) and bool(answer))
+            #    )
+            submit_button = st.form_submit_button(label="Submit")
+
+        # IF .. the form have been submitted
+        if submit_button:
+            # IF .. the answer is missing, then display a message 
+            if bool(question) and not bool(answer.strip()):
+                st.warning("An answer is missing. The card can not be created")
+            # ELIF .. the question is missing, then display a message
+            elif not bool(question.strip()) and bool(answer):
+                st.warning("An question is missing. The card can not be created")
+            # ELIF .. the two fields are missing, then ...
+            elif not bool(question.strip()) and not bool(answer.strip()):
+                st.warning("The question and its answer are missing. The card can not be created")
+            # ELSE .. both fields are filled,then create the card
+            else:
+                new_card(question.strip(), answer.strip(), one_select['id'])
+                # Rerun the streamlit page as form behavior prevent my table from refresh
+                st.rerun()
 
 
     # Expandable section to update a card
     with st.expander("Update a card"):
         st.write("alice")
 
-    # Expandable section to remove a card 
-    #with st.expander("Remove a card"):
-    #    st.multiselect(
-    #      label="Select one or multiple cards to remove"
-    #      , options=  
-    #    )
 
+
+    # Expandable section to remove a card 
     with st.expander("Remove cards"):
 
         with st.container():
