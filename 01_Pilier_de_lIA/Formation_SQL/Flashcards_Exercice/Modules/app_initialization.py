@@ -31,7 +31,14 @@ import Modules.crud_functions_cards_table as cfct
 import Modules.crud_functions_themes_table as cftt
 # -- x----------------x --
 
+# -- ENVIRONMENT VARIABLES
+# -- x-------------------------------------x --
+DEFAULT_TEXT_INPUT = ""
+DEFAUL_TEXT_AREA = ""
+# DEFAULT_SELECTEBOX = 
+# DEFAULT_MULTISELECT = 
 
+# -- x-------------------------------------x --
 
 
 
@@ -91,8 +98,11 @@ def init_config_page():
         #print(f'\n[CARDS]:\n {st.session_state.cards}\n')
 
     # Create keys to initialise form 
-    #if "form_selectbox" not in st.session_state:
-    #    st.session_state.form_selectbox = {"id":10, "theme":""}
+    if "form_create_card_version" not in st.session_state:
+        st.session_state.form_create_card_version = 0
+        # Create keys to initialise form 
+    if "form_update_card_version" not in st.session_state:
+        st.session_state.form_update_card_version = 0
     # -- x--------------x --
 
 
