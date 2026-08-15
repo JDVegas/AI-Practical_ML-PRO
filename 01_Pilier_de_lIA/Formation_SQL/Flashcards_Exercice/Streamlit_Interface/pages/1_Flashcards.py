@@ -41,6 +41,15 @@ st.set_page_config(page_title="Flashcards", layout='wide')
 app_initialization()
 # -- x-------------------------x --
 
+
+
+# Indexes
+# -- x-------------------------x --
+# Build a theme index
+theme_index = {item['id']:item["theme"] for item in st.session_state.themes}
+# -- x-------------------------x --
+
+
 # -- x-----------------------------------------x --
 
 
@@ -50,11 +59,59 @@ app_initialization()
 def toggle_answer():
     st.session_state.show_answer = not st.session_state.show_answer
 
+
+# Define a plumbing function to load card by theme 
+def load_cards_by_theme(theme_id: int):
+    """ Plumbing function that allow to load cards by theme
+    
+        Args : 
+            theme_id (int): the id of the selected theme
+    """
+
+    # Load the cards related to this theme
+    cards = cfct.get_cards_by_theme(theme_id)
+    # Format theme
+    st.session_state.cards_selected_theme = [{key:cards[key][idx] for key in cards.keys()} for idx in range(len(cards['id']))]
+
+    # Help debugging 
+    print(f"[cards_selected_theme]:\n{st.session_state.cards_selected_theme}")
+
+    # Display a message to the users to indicate that the card are well loaded
+    if st.session_state.cards_selected_theme :
+        st.toast(f"The card related to the theme '{theme_index[theme_id]}' have been properly loaded. The Deck contains {len(st.session_state.cards_selected_theme)} cards.")
 # -- x-----------------------------------------x --
 
 
 
 
+# -- SIDEBAR CONTAINT
+# -- x-----------------------------------------x --
+with st.sidebar:
+    st.write(f"Total number of cards:\n {cfct.get_number_of_cards()}")
+    #st.write("---")
+
+    # Instantiate a selectbox to select a theme
+    selected_theme = st.selectbox(
+                        label="Select the theme you want to study"
+                        ,options=st.session_state.themes
+                        , format_func=lambda x: x["theme"]
+                    )
+
+    # IF .. the user select a theme, then load the cards related to this thele
+    if selected_theme:
+        load_cards_by_theme(selected_theme['id'])
+
+
+
+# -- x-----------------------------------------x --
+
+
+
+
+
+
+
+""'''
 # -- PAGE CONTAINT
 # -- x-----------------------------------------x --
 st.title("Flashcards")
@@ -103,4 +160,4 @@ with col2:
 
     with subcol23: 
         #if 
-        st.button(label="Wrong", width="stretch")
+        st.button(label="Wrong", width="stretch")'''""
