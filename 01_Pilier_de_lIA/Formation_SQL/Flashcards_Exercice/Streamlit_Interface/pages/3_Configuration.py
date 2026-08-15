@@ -25,6 +25,7 @@ import streamlit as st
 root_dir = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(root_dir))
 
+import  Modules.app_initialization as app_init
 from Modules.app_initialization import app_initialization, init_config_page
 import Modules.crud_functions_cards_table as cfct 
 import Modules.crud_functions_themes_table as cftt
@@ -91,6 +92,32 @@ def new_card(question: str, answer: str, theme_id: int):
     # Inform the user
     st.toast("The new card have been properly added to the database", duration="short")
     
+
+# Define a function to update cards
+def update_card(card_id: int, question: str, answer: str, probability:float, theme_id: int):
+    """ Plumbing function that allow to update a selected card 
+    
+        Args : 
+            card_id (int): the id of the card to update
+            question (str): the question to update
+            answer (str): the answer to update
+            probability (float): the current probability (not updated)
+            theme_id (int): the id of the theme to update
+    """
+
+    try:
+        cfct.update_card(card_id, question, answer, probability, theme_id)
+    except Exception as e:
+        print(f"Error `update_card` function: {e}")
+
+    # Update cards within the session
+    updated_cards = cfct.get_all_cards()
+    st.session_state.cards = [{key:updated_cards[key][idx] for key in updated_cards.keys()} for idx in range(len(updated_cards['id']))]
+    
+
+    # Inform the user
+    st.toast(f"The card(s) with the id '{card_id}' have been properly updated into the database", duration="short")
+
 
 
 # Define a function to remove cards
@@ -231,11 +258,11 @@ with tab1 :
 
     # Expandable section to create a card 
     with st.expander("Create a card"):
-        """
-        NOTE : I here used a formular for the experimentation but it woudl have been easier to simply
-        add widgets to take the user input and a button to apply the function. With keys, 
-        each field woudld have been cleaned after running the function
-        """
+        
+        #Note that here I used a formular for the experimentation but it woudl have been easier to simply
+        #add widgets to take the user input and a button to apply the function. With keys, 
+        #each field woudld have been cleaned after running the function
+        
         with st.form("Create_card"):
             # Ask the user to choose a theme
             #one_select = st.selectbox(label="Choose a theme", options=st.session_state.themes[["theme", "id"]].sort_values(by=["theme"]))
@@ -243,15 +270,23 @@ with tab1 :
                             label="Choose a theme"
                             , options=st.session_state.themes
                             , format_func=lambda x: x["theme"]
-                            #, key="form_selectbox"
+                            , key=f"theme_{st.session_state.form_create_card_version}"
                         )
 
             # Help debugging 
             #print(f'\n[one_select]: {one_select}\n')
 
-            # Instantiate the field to ger the user question and answer
-            question = st.text_input("Question")
-            answer = st.text_area("Answer")
+            # Instantiate the field to get the user question and answer
+            question = st.text_input(
+                            label="Question"
+                            , value=app_init.DEFAULT_TEXT_INPUT
+                            , key=f"question_{st.session_state.form_create_card_version}"
+                        )
+            answer = st.text_area(
+                        label="Answer"
+                        , value=app_init.DEFAUL_TEXT_AREA
+                        , key=f"answer_{st.session_state.form_create_card_version}"        
+                    )
 
             #submit_button = st.form_submit_button(
             #        label= "Submit"
@@ -276,6 +311,8 @@ with tab1 :
             # ELSE .. both fields are filled,then create the card
             else:
                 new_card(question.strip(), answer.strip(), one_select['id'])
+                # Increment the form version 
+                st.session_state.form_create_card_version +=1
                 # Rerun the streamlit page as form behavior prevent my table from refresh
                 st.rerun()
 
@@ -283,12 +320,63 @@ with tab1 :
     # Expandable section to update a card
     with st.expander("Update a card"):
         # Instantiate a selectbox to select the card we want to update 
-        st.selectbox(
+        card_to_update = st.selectbox(
             label="Select a card to update"
             , options=st.session_state.cards
             , format_func=lambda x :x["question"]
         )
 
+        # IF .. a card is selected then open a form to update it 
+        if card_to_update:
+            Col1 ,Col2 = st.columns(2)
+
+            with Col1:
+                st.markdown("<b><u>Current question</u> :</b>", unsafe_allow_html=True)
+                st.write(card_to_update["question"])
+
+                st.markdown("<b><u>Current answer</u> :</b>", unsafe_allow_html=True)
+                st.write(card_to_update["response"])
+
+                st.markdown("<b><u>Current theme</u> :</b>", unsafe_allow_html=True)
+                st.write(theme_index[card_to_update["id_theme"]] if theme_index[card_to_update["id_theme"]] else "No theme assigned !")
+
+            with Col2:
+                with st.form("Update_card"):
+                    # Instantiate the fields so that the user can modify those he wants
+                    updated_question = st.text_input(
+                                            label="Question to update"
+                                            , value=app_init.DEFAULT_TEXT_INPUT
+                                            , key=f"updated_question_{st.session_state.form_update_card_version}"
+                                        ).strip()
+                    updated_answer = st.text_area(
+                                        label="Answer to update"
+                                        , value=app_init.DEFAUL_TEXT_AREA
+                                        , key=f"update_answer_{st.session_state.form_update_card_version}"
+                                    ).strip()
+                    updated_theme = st.selectbox(
+                        label="Theme to update"
+                        , options=st.session_state.themes
+                        , format_func=lambda x: x["theme"]
+                        , key=f"update_theme_{st.session_state.form_update_card_version}" 
+                    )
+
+                    # Instantiate the submit button
+                    submitted = st.form_submit_button("Submit")
+
+                    # IF .. the submitted button have been pushed, then update the card
+                    if submitted:
+                        update_card(
+                            card_id=card_to_update["id"]
+                            , question=updated_question if updated_question else card_to_update["question"]
+                            , answer=updated_answer if updated_answer else card_to_update["response"]
+                            , probability=card_to_update["probability"]
+                            , theme_id=updated_theme["id"] if updated_theme["id"] else card_to_update["id_theme"]
+                        )
+                        # Increment the form version 
+                        st.session_state.form_update_card_version += 1
+                        # Rerun the streamlit page as form behavior prevent my table from refresh
+                        st.rerun()
+                        
 
     # Expandable section to remove a card 
     with st.expander("Remove cards"):
@@ -368,7 +456,10 @@ with tab2 :
 
     # Expandable section to create a new theme 
     with st.expander("Create a theme"):
-        text_input = st.text_input("Write a new theme", key="new_theme").strip()
+        text_input = st.text_input(
+                        label="Write a new theme"
+                        , key="new_theme"
+                    ).strip()
         #print(f'\n[Text Input]: {text_input}\n')
   
 
@@ -391,7 +482,7 @@ with tab2 :
                     , on_click=add_theme
                     , args=(text_input, )
                     , disabled=not st.session_state.new_theme_correct
-                    )
+                )
         # CAUTION : THIS IS NOT ALLOWED  
         #if middle.button(label="Reset field containt"):
         #    st.session_state.new_theme = ""
