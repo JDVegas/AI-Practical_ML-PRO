@@ -282,8 +282,12 @@ with tab1 :
 
     # Expandable section to update a card
     with st.expander("Update a card"):
-        st.write("alice")
-
+        # Instantiate a selectbox to select the card we want to update 
+        st.selectbox(
+            label="Select a card to update"
+            , options=st.session_state.cards
+            , format_func=lambda x :x["question"]
+        )
 
 
     # Expandable section to remove a card 
