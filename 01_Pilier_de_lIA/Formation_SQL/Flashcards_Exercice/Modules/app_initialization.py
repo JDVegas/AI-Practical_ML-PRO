@@ -58,6 +58,9 @@ DEFAUL_TEXT_AREA = ""
 def init_flashcards_page():
     """ Initialize flashcards page """
 
+    # Load cards list from the database by theme
+    if "cards_selected_theme" not in st.session_state:
+        st.session_state.cards_selected_theme = {}
 
     # Help Debugging
     print(f"[init_flashcards_page] have been run !")
