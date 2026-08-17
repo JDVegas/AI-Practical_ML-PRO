@@ -58,9 +58,26 @@ DEFAUL_TEXT_AREA = ""
 def init_flashcards_page():
     """ Initialize flashcards page """
 
+    # Initialise the selected theme
+    if "selected_theme" not in st.session_state:
+        st.session_state.selected_theme = ""
+
     # Load cards list from the database by theme
-    if "cards_selected_theme" not in st.session_state:
-        st.session_state.cards_selected_theme = {}
+    if "selected_theme_cards" not in st.session_state:
+        st.session_state.selected_theme_cards = {}
+
+    # Define the number of card to study
+    if "number_cards_to_study" not in st.session_state:
+        st.session_state.number_cards_to_study = 10
+
+    # Define the current studied deck
+    if "current_studied_cards" not in st.session_state:
+        st.session_state.current_studied_cards = []
+
+    # Initialise show answer variable 
+    if "show_answer" not in st.session_state:
+        st.session_state.show_answer = False
+
 
     # Help Debugging
     print(f"[init_flashcards_page] have been run !")
