@@ -74,6 +74,18 @@ def init_flashcards_page():
     if "current_studied_cards" not in st.session_state:
         st.session_state.current_studied_cards = []
 
+    # Define a learning session variable
+    if "learning_session_running" not in st.session_state:
+        st.session_state.learning_session_running = False
+
+    # Define a variable to save current card being learn
+    if "current_card" not in st.session_state:
+        st.session_state.current_card = 0
+
+    # Define a variable to save the session answers
+    if "learning_session_answers" not in st.session_state:
+        st.session_state.learning_session_answers = []
+
     # Initialise show answer variable 
     if "show_answer" not in st.session_state:
         st.session_state.show_answer = False
