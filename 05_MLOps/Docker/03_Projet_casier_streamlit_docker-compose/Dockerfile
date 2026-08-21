@@ -54,11 +54,5 @@ COPY . .
 RUN uv sync --frozen
 
 
-# Define a volume
-VOLUME /data
-
-# Define the exposition port
-EXPOSE 8501
-
 # Run a command to run our Streamlit app
 CMD ["uv", "run", "streamlit", "run", "main.py"]
