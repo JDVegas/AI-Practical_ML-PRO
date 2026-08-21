@@ -1,0 +1,9 @@
+services:
+  app-streamlit:
+    build: .
+    image: my_super_locker_image:1.0
+    ports:
+      - "8501:8501"
+    volumes:
+      - .my_data:/data
+    restart: unless-stopped
