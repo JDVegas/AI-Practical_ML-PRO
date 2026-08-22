@@ -70,16 +70,26 @@ def charger_brochures(dossier=BROCHURES):
     from pypdf import PdfReader
 
     lignes = []
+    # Iterate through each document from the folder
     for nom_fichier in sorted(os.listdir(dossier)):
+        # IF .. the file is not a PDF then ignore the next instructions and directly run the next iteration
         if not nom_fichier.endswith(".pdf"):
             continue
+        # Read the PDF
         lecteur = PdfReader(os.path.join(dossier, nom_fichier))
+        # Extract all the text from the PDF and concatenate it into a unique text
         texte = "\n".join((page.extract_text() or "") for page in lecteur.pages)
+        # Define a specific "entete" which will be commun to each document completing with data from the document looked after using regular expression
         entete = re.search(r"^(.+?) - (\d) etoiles - a partir de (\d+) euros la nuit", texte, re.M)
+        # Idem but for other info
         note = re.search(r"Note des voyageurs : ([\d.]+) sur 10 \((\d+) avis\)", texte)
+        # Reformat the text removing multispace, tabs and line breaks replacing by unique whitespace. 
         plat = " ".join(texte.split())
+        # Extract info about presentation using regular expression
         presentation = re.search(r"Presentation (.*?) Equipements", plat)
+        # Extract customer reviews / opinions 
         avis_clients = re.search(r"Avis des clients (.*?) [A-ZÀ-Ý][^ ]* .*Brochure du reseau", plat)
+        # Add the multiple extracted element to build a dictionary and complete the list 
         lignes.append({
             "ville": entete.group(1).strip() if entete else "?",
             "hotel": texte.strip().splitlines()[0].strip(),
