@@ -63,5 +63,5 @@ if st.button("Refresh"):
             st.write(f"- {item}")
 
     except Exception as e:
-        st.error("Connection Error: {e}")
+        st.error(f"Connection Error: {e}")
 # -- x---------------------------x --

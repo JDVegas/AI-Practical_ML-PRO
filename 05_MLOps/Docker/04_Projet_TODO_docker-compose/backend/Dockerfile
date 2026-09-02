@@ -58,4 +58,4 @@ RUN uv sync --frozen --no-dev
 
 
 # Run a command to run our Streamlit app
-CMD ["uv", "run", "uvicorn", "main:pp"]
+CMD ["uv", "run", "uvicorn", "main:app"]
