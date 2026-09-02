@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test API Sigmoid</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .container {
+            background: #f5f5f5;
+            padding: 30px;
+            border-radius: 10px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px 0;
+            font-size: 16px;
+        }
+        input {
+            width: 200px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 5px;
+            min-height: 50px;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculateur Sigmoid</h1>
+        <div>
+            <label for="x">Valeur de x :</label><br>
+            <input type="number" id="x" step="0.1" value="0">
+        </div>
+        <br>
+        <button onclick="calculateSigmoid()">Calculer</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        async function calculateSigmoid() {
+            const x = document.getElementById('x').value;
+            const resultDiv = document.getElementById('result');
+
+            try {
+                // ATTENTION : Ceci va provoquer une erreur CORS si le fichier HTML
+                // est ouvert directement dans le navigateur (file://)
+                // Solution : configurer CORSMiddleware côté API (voir partie 3)
+                const response = await fetch(`http://localhost:8000/sigmoid?x=${x}`);
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    resultDiv.innerHTML = `<span class="error">Erreur : ${JSON.stringify(error.detail)}</span>`;
+                    return;
+                }
+
+                const data = await response.json();
+                resultDiv.innerHTML = `
+                    <strong>Résultat :</strong><br>
+                    sigmoid(${data.input}) = ${data.sigmoid}
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="error">Erreur de connexion : ${error.message}<br>
+                (Probablement une erreur CORS - voir console)</span>`;
+            }
+        }
+    </script>
+</body>
+</html>
