@@ -22,7 +22,7 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 # Force Python files to be compiled into BYTECODE
 ENV UV_COMPILE_BYTECODE=1
 #
-ENV UV_LINK_MODE = copy
+ENV UV_LINK_MODE=copy
 # Download Python when necessary
 ENV UV_PYTHON_DOWNLOAD=auto
 # -- x---------x --
