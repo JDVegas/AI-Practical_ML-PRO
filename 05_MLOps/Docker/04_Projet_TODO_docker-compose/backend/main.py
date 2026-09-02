@@ -54,7 +54,7 @@ def startup():
     # Use the db cursor to execute SQL request
     with conn.cursor() as cur:
         # Create the item table
-        cur.execute("CREATE TABLE IF NOT EXISTS items (id, SERIAL PRIMARY KEY, name TEXT)")
+        cur.execute("CREATE TABLE IF NOT EXISTS items (id SERIAL PRIMARY KEY, name TEXT)")
         # Commit the new table
         conn.commit()
 
@@ -89,7 +89,7 @@ def create_item(item: Item):
     # Use the db cursor to execute SQL request
     with conn.cursor() as cur:
         # Insert an item into the table items
-        cur.execute("INSERT INTO items (name) VALUE (%s)", (item.name,))
+        cur.execute("INSERT INTO items (name) VALUES (%s)", (item.name,))
         # Commit the change 
         conn.commit()
 
