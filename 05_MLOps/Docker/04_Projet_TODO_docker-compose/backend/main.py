@@ -33,7 +33,7 @@ class Item(BaseModel):
 
 
 # Define a function to connect to the database
-def get_db_connection():
+"""def get_db_connection():
     while True:
         try:
             # Open a connection to the database using the DB URL (contained into a environment variable)
@@ -42,7 +42,12 @@ def get_db_connection():
         except psycopg2.OperationalError:
             print("The DB is not ready yet, new trial in 2 sec ...")
             time.sleep(2)
-
+"""
+# Define a function to connect to the database : Simplified version Tanxs to the Healthcheck within the docker-compose.yaml file
+def get_db_connection():
+    # Open a connection to the database using the DB URL (contained into a environment variable)
+    return psycopg2.connect(os.getenv("DATABASE_URL"))
+      
 
 
 # Initialise starting table
