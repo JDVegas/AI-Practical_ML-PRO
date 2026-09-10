@@ -1,0 +1,10 @@
+[project]
+name = "02-sqlalchely"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "fastapi[standard]>=0.128.8",
+    "sqlalchemy>=2.0.52",
+]
