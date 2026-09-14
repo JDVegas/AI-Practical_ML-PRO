@@ -1,0 +1,2 @@
+# Do not save the model on Github
+*.joblib
