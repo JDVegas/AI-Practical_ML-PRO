@@ -1,0 +1,3 @@
+# Remove all folder whereever it is located 
+**/.venv
+**/.git
