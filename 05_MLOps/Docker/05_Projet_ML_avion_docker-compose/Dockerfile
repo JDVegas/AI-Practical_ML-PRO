@@ -10,7 +10,7 @@ WORKDIR /app
 # Update all package within the container 
 # AND update the SSL certificats (UV dependency)
 # AND clean the app cash 
-RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates \
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Install UV copying the elements from UV server
