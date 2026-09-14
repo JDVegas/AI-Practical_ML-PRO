@@ -40,7 +40,7 @@ class FlightRequest(BaseModel):
     arrival_time: str
     duration: float
     days_left: int
-    stops_label: int
+    stops_label: str
     class_label: str
 # -- x-----------x --
 
@@ -103,7 +103,7 @@ def predict_price(req: FlightRequest):  # Use the defined pydantic input data sc
 
     try :
         # Infer on the model to predict a plane ticket price
-        prediction = model.predict(input_data[0])
+        prediction = model.predict(input_data)[0]
         # return a dict that will be converted into a JSON
         return {"estimated_price": max(0, float(prediction))}
 
