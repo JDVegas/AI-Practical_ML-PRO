@@ -51,7 +51,7 @@ COPY backend/ .
 COPY artifacts/flight_price_model.joblib /app/artifacts/flight_price_model.joblib
 
 # RUN the API
-CMD ["uv", "run", "uvicorn", "app:main"]
+CMD ["uv", "run", "uvicorn", "main:app"]
 # -- x--------------------------------x --
 
 
