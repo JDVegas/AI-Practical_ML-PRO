@@ -1,3 +1,4 @@
 # Do not save the model on Github
 *.joblib
 __pycach__
+*.pyc
